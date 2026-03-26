@@ -160,3 +160,40 @@ ul {
 .button-draw:hover {
     background-color: var(--color-button-hover);
 }
+
+/* Mensaje */
+.mensaje {
+    color: red;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+    display: none;
+}
+
+/* Botón reset */
+.button-reset {
+    background-color: #ff6b6b;
+    color: var(--color-white);
+    margin-top: 10px;
+    width: 100%;
+}
+
+.button-reset:hover {
+    background-color: #ff5252;
+}
+
+/* Botón eliminar */
+.button-delete {
+    background-color: #ff6b6b;
+    color: var(--color-white);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.button-delete:hover {
+    background-color: #ff5252;
+}

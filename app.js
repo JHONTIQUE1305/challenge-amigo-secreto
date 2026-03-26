@@ -1,5 +1,15 @@
 // Lista para almacenar los nombres de los amigos
-let amigos = [];
+let amigos = JSON.parse(localStorage.getItem('amigos')) || [];
+
+// Función para mostrar mensajes temporales
+function mostrarMensaje(texto) {
+    const mensajeDiv = document.getElementById('mensaje');
+    mensajeDiv.textContent = texto;
+    mensajeDiv.style.display = 'block';
+    setTimeout(() => {
+        mensajeDiv.style.display = 'none';
+    }, 3000);
+}
 
 // Función para agregar un amigo a la lista
 function agregarAmigo() {
@@ -7,16 +17,17 @@ function agregarAmigo() {
     const nombre = input.value.trim();
 
     if (nombre === '') {
-        alert('Por favor, escribe un nombre válido.');
+        mostrarMensaje('Por favor, escribe un nombre válido.');
         return;
     }
 
     if (amigos.includes(nombre)) {
-        alert('Este nombre ya está en la lista.');
+        mostrarMensaje('Este nombre ya está en la lista.');
         return;
     }
 
     amigos.push(nombre);
+    localStorage.setItem('amigos', JSON.stringify(amigos));
     actualizarListaAmigos();
     input.value = '';
 }
@@ -28,15 +39,22 @@ function actualizarListaAmigos() {
 
     amigos.forEach(amigo => {
         const li = document.createElement('li');
-        li.textContent = amigo;
+        li.innerHTML = `${amigo} <button class="button-delete" onclick="eliminarAmigo('${amigo}')">Eliminar</button>`;
         lista.appendChild(li);
     });
+}
+
+// Función para eliminar un amigo de la lista
+function eliminarAmigo(nombre) {
+    amigos = amigos.filter(amigo => amigo !== nombre);
+    localStorage.setItem('amigos', JSON.stringify(amigos));
+    actualizarListaAmigos();
 }
 
 // Función para sortear los amigos secretos
 function sortearAmigo() {
     if (amigos.length < 2) {
-        alert('Necesitas al menos 2 amigos para sortear.');
+        mostrarMensaje('Necesitas al menos 2 amigos para sortear.');
         return;
     }
 
@@ -62,7 +80,7 @@ function sortearAmigo() {
     }
 
     if (!valido) {
-        alert('No se pudo realizar un sorteo válido. Intenta de nuevo.');
+        mostrarMensaje('No se pudo realizar un sorteo válido. Intenta de nuevo.');
         return;
     }
 
@@ -87,9 +105,22 @@ function mostrarResultados(sorteo) {
     });
 }
 
+// Función para resetear el juego
+function resetearJuego() {
+    amigos = [];
+    localStorage.removeItem('amigos');
+    actualizarListaAmigos();
+    document.getElementById('resultado').innerHTML = '';
+    document.getElementById('amigo').value = '';
+    document.getElementById('mensaje').style.display = 'none';
+}
+
 // Event listener para añadir amigo al presionar Enter
 document.getElementById('amigo').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         agregarAmigo();
     }
 });
+
+// Cargar la lista al iniciar
+actualizarListaAmigos();
